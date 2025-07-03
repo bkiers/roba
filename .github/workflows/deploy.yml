@@ -29,6 +29,8 @@ jobs:
           pelican content -o output -s pelicanconf.py
 
       - name: Deploy to GitHub Pages
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           pip install ghp-import
           ghp-import output -b gh-pages
