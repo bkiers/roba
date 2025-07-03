@@ -7,7 +7,9 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = "https://www.rotterdambasketbal.nl"
+# SITEURL = "https://www.rotterdambasketbal.nl"
+# RELATIVE_URLS = False
+SITEURL = 'https://bkiers.github.io/roba'
 RELATIVE_URLS = False
 
 FEED_ALL_ATOM = "feeds/all.atom.xml"

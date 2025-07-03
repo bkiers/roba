@@ -1,6 +1,7 @@
 AUTHOR = 'Bart'
 SITENAME = 'Rotterdam Basketball'
-SITEURL = ""
+SITEURL = ''
+RELATIVE_URLS = True
 
 PATH = "content"
 
@@ -30,6 +31,3 @@ SOCIAL = (
 )
 
 DEFAULT_PAGINATION = 10
-
-# Uncomment following line if you want document-relative URLs when developing
-# RELATIVE_URLS = True

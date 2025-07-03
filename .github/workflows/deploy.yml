@@ -1,41 +1,57 @@
 name: Daily Pelican Build
 
 on:
+  # Run this workflow every day at 4 AM UTC
   schedule:
     - cron: '0 4 * * *'
+
+  # Allow manual triggering of the workflow
   workflow_dispatch:
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Check out the repository code using a Personal Access Token (PAT) for authenticated git pushes
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT }}
 
+      # Step 2: Set up Python 3.10 in the GitHub Actions runner
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
+      # Step 3: Install Python dependencies from requirements.txt
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
 
+      # Step 4: Run the fetch_data.py script to fetch data and generate Markdown content
       - name: Fetch data and generate content
         run: |
           python fetch_data.py
 
+      # Step 5: Use Pelican to generate static HTML from the content folder
       - name: Build the site
         run: |
           pelican content -o output -s pelicanconf.py
 
+      # Step 6: Deploy the generated site to the gh-pages branch using ghp-import
       - name: Deploy to GitHub Pages
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
+          # Install the ghp-import tool to manage GitHub Pages deployment
           pip install ghp-import
+
+          # Configure git user identity for the deployment commit
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+
+          # Import the generated static files from the output folder into gh-pages branch
           ghp-import output -b gh-pages
+
+          # Push the gh-pages branch to GitHub using the authenticated remote
           git push -f https://${GH_TOKEN}@github.com/${{ github.repository }} gh-pages
